@@ -1,6 +1,11 @@
 /*
- * The GUI and driver of the program. Creates the grid world, lays the nodes
- * to search, etc. Idea from Devon Crawford.
+ * The GUI and driver program. 
+ * It lays down the grid, handles mouse and keyboard events and runs the algorithm
+ * This class handles the controlls and sets the values like: run the algorithm,
+ * selecting an algorithm, pause, start and end nodes, wall nodes, clearing all the data,
+ * open, closed lists and final Paths, etc.
+ * No state information is saved in this class, all the above data is saved in the object of pathfinder class.
+ * This class sets those data fields and render the values by fetching them whenever needed.
  */
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -11,6 +16,7 @@ import javax.swing.*;
 
 public class Controller extends JPanel implements ActionListener,
                               MouseListener, KeyListener, MouseMotionListener {
+  //PathFinder class will store all the information like wall nodes, start node, final path, etc
   private PathFinder path;
   // added a Jpanel frame
   private JPanel pane;
@@ -29,12 +35,12 @@ public class Controller extends JPanel implements ActionListener,
   private static final int HEIGHT = 750;
   private static final int NODE_SIZE = 25;
 
-  public Controller() {
+  public Controller() {   
 
     isOctile = true;
     isManhattan = false;
 
-    setLayout(null);
+    setLayout(null);           //No, we could not have worked with gridlayout :(
     pane = new JPanel();
     setFocusable(true);
 
@@ -45,20 +51,20 @@ public class Controller extends JPanel implements ActionListener,
     timer = new Timer(100, this);
 
     //set up frame
-    frame = new JFrame();
+    frame = new JFrame();    
     frame.setContentPane(this);
-    frame.setTitle("Path-Finder");
+    frame.setTitle("Left or Right");
     frame.getContentPane().setPreferredSize(new Dimension(WIDTH, HEIGHT));
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);            
     frame.pack();
     frame.setLocationRelativeTo(null);
-    frame.setVisible(true);
+    frame.setVisible(true);                      //This finally renders the frame.
 
     path = new PathFinder(this);
 
     //show changes to frame 
     this.revalidate();
-    this.repaint();
+    this.repaint();                             //anything on frame changes, call the paint() method again.
 
     timer.start();
   }
@@ -69,15 +75,13 @@ public class Controller extends JPanel implements ActionListener,
   }
 
   /*
-   * All the graphics will be created using this method. Changing certain
-   * things about the grid will prompt this method to be called again and
-   * will recreate the grid reflecting the changes.
-   */
+	We need to override the paint method to create our own graphics
+  */
   @Override
   public void paint(Graphics g) {
-    //Draw grid for pathfind
+    //Draw grid on the screen( a matrix with rows = window_height/NODE_SIZE and columns = window_width/NODE_SIZE)
     g.setColor(Color.lightGray);
-    for(int j = 0; j < this.getHeight(); j += NODE_SIZE) {
+    for(int j = 0; j < this.getHeight(); j += NODE_SIZE) {          //
       for(int i = 0; i < this.getWidth(); i += NODE_SIZE) {
 
         g.setColor(new Color(40, 42, 54));
@@ -87,7 +91,7 @@ public class Controller extends JPanel implements ActionListener,
       }
     }
 
-    //draw the wall nodes
+    //draw the wall nodes by fetching from the pathFinder
     Set<Point> wallList = path.getWall();
     g.setColor(new Color(68, 71, 90));
     for(Point pt : wallList) {
@@ -114,7 +118,7 @@ public class Controller extends JPanel implements ActionListener,
       g.fillRect(e.getX() + 1, e.getY() + 1, NODE_SIZE - 2, NODE_SIZE - 2);
     }
 
-    //draw final path
+    //Fetch the final path( check how we developed the final path in PathFinder class) and draw it
     ArrayList<Node> finalPath = path.getFinal();
     g.setColor(new Color(189, 147, 249));
     for(int i = 0; i < finalPath.size(); i++) {
@@ -168,7 +172,7 @@ public class Controller extends JPanel implements ActionListener,
       case KeyEvent.VK_BACK_SPACE: 
         if(!path.isRun()) {
           path.deleteWalls(true);
-          path.reset();
+          path.reset();  //this will clear all the lists and properties: closed, open, finalPath, start, end, etc.
 
           System.out.println("Grid Deletion Complete.\n");
         }
@@ -220,8 +224,7 @@ public class Controller extends JPanel implements ActionListener,
   }
 
   /*
-   * After mouse actions, will trigger this method and make appropriate
-   * calculations and nodes. For example, clicking will make walls, etc.
+   * Handler for mouse events
    */
   public void gridWork(MouseEvent e) {
 
@@ -238,7 +241,10 @@ public class Controller extends JPanel implements ActionListener,
         int xTmp = e.getX() - xOver;
         int yTmp = e.getY() - yOver;
 
-        //if start null, create start on nodes where end not already
+        //if start is null, the create a new start node.
+		//check if the position already has a wall or end node presend there
+		//Do not create start node is there is a wall at that place
+		//override if there was an end node there. 
         if(start == null) {
 
           if(!path.isWall(new Point(xTmp, yTmp))) {
@@ -251,7 +257,7 @@ public class Controller extends JPanel implements ActionListener,
             }
           }
 
-        //otherwise, do not move start to where end is
+        //If there was a start already, change its coordinates.
         } else {
 
           if(!path.isWall(new Point(xTmp, yTmp))) {
@@ -274,7 +280,7 @@ public class Controller extends JPanel implements ActionListener,
         int xTmp = e.getX() - xOver;
         int yTmp = e.getY() - yOver;
 
-        //if end null, create end on nodes where start not already
+        //same as start node
         if(end == null) {
           
           if(!path.isWall(new Point(xTmp, yTmp))) {
@@ -287,7 +293,7 @@ public class Controller extends JPanel implements ActionListener,
             }
           }
 
-        //otherwise, do not move end to where start is
+        //same as for start node
         } else {
           
           if(!path.isWall(new Point(xTmp, yTmp))) {
@@ -306,7 +312,7 @@ public class Controller extends JPanel implements ActionListener,
 
       //d key and left mouse deletes nodes
       } else if(keyPress == 'd') {
-        //delete walls with this function if no right click
+        //check if the curr node is start, end or a wall and set it to null
         int nodeX = e.getX() - xOver;
         int nodeY = e.getY() - yOver;
 
@@ -320,7 +326,7 @@ public class Controller extends JPanel implements ActionListener,
 
         repaint();
 
-      //just mouse click makes walls
+      //Create walls by simply clicking on the nodes.
       } else {
         //create walls and add to wall list
         Node tmpWall = new Node(e.getX() - xOver, e.getY() - yOver);
@@ -335,16 +341,12 @@ public class Controller extends JPanel implements ActionListener,
 
         repaint();
       }
-
-    //if mouse click was right click
-    } else if(e.getButton() == MouseEvent.BUTTON1) {
-      //delete nodes with right click
-    }
   }
 
   @Override
   public void mouseClicked(MouseEvent e) {
     //all mouse clicks to change grid somehow
+	//call the generic mouse EventHandler function on any kind of mouse click when the algorithm is not running
     if(!path.isRun()) {
       gridWork(e);
     }
