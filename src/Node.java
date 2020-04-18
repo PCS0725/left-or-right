@@ -1,18 +1,17 @@
 /*
- * The Node Class is used to create the indivdual nodes that is to be searched
+ * This class defines individual cells of the grids as nodes in a graph.
+ * We maintain additional information in the node to calculate final path, cost, etc.
  */
 
 public class Node {
 
   private int x;
-  // varaibles used for x
+  // variables used for x
   private int y;
-  private double f, g, h;
-  private Node parent;
+  private double f, g, h;   //cost calculation variables for A*
+  private Node parent;    // the node through which we came to current node in the final path
 
-  /**
-   * The node constructor that creates the initial positions of the nodes.
-   */
+
   public Node(int x, int y) {
     this.x = x;
     this.y = y;
@@ -74,7 +73,7 @@ public class Node {
   }
 
   /**
-   * Extra methods that is used to compare Nodes and print the location
+   * Extra methods that are used to compare Nodes and print the location
    * of the nodes.
    */
 
@@ -93,7 +92,6 @@ public class Node {
     if(this.x == tmp.getX() && this.y == tmp.getY()) {
       return true;
     }
-
     return false;
   }
 }

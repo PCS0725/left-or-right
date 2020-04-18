@@ -1,11 +1,8 @@
 /*
  * The GUI and driver program. 
- * It lays down the grid, handles mouse and keyboard events and runs the algorithm
- * This class handles the controlls and sets the values like: run the algorithm,
- * selecting an algorithm, pause, start and end nodes, wall nodes, clearing all the data,
- * open, closed lists and final Paths, etc.
+ * It lays down the grid, handles mouse and keyboard events and runs the algorithm.
  * No state information is saved in this class, all the above data is saved in the object of pathfinder class.
- * This class sets those data fields and render the values by fetching them whenever needed.
+ * This class sets the data fields and renders the values by fetching them whenever needed.
  */
 import java.util.ArrayList;
 import java.util.PriorityQueue;
@@ -93,7 +90,7 @@ public class Controller extends JPanel implements ActionListener,
 
     //draw the wall nodes by fetching from the pathFinder
     Set<Point> wallList = path.getWall();
-    g.setColor(new Color(68, 71, 90));
+    g.setColor(new Color(228, 31, 13));
     for(Point pt : wallList) {
       int xCoord = (int) pt.getX();
       int yCoord = (int) pt.getY();
@@ -120,7 +117,7 @@ public class Controller extends JPanel implements ActionListener,
 
     //Fetch the final path( check how we developed the final path in PathFinder class) and draw it
     ArrayList<Node> finalPath = path.getFinal();
-    g.setColor(new Color(189, 147, 249));
+    g.setColor(new Color(35, 228, 15));
     for(int i = 0; i < finalPath.size(); i++) {
       g.fillRect(finalPath.get(i).getX() + 1, finalPath.get(i).getY() + 1,
                  NODE_SIZE - 2, NODE_SIZE - 2);
@@ -128,14 +125,14 @@ public class Controller extends JPanel implements ActionListener,
 
     //draw the start node
     if(start != null) {
-      g.setColor(new Color(139, 233, 253));
+      g.setColor(new Color(8, 228, 228));
       g.fillRect(start.getX() + 1, start.getY() + 1, NODE_SIZE - 2, NODE_SIZE -
           2);
     }
 
     //draw the end node
     if(end != null) {
-      g.setColor(new Color(255, 121, 198));
+      g.setColor(new Color(228, 35, 225));
       g.fillRect(end.getX() + 1, end.getY() + 1, NODE_SIZE - 2, NODE_SIZE - 2);
     }
   }
@@ -228,182 +225,182 @@ public class Controller extends JPanel implements ActionListener,
    */
   public void gridWork(MouseEvent e) {
 
-    //if mouse click was left click
-    if(e.getButton() == MouseEvent.BUTTON1) {
+      //if mouse click was left click
+      if (e.getButton() == MouseEvent.BUTTON1) {
 
-      //mouse clicks not exactly at node point of creation, so find remainder
-      int xOver = e.getX() % NODE_SIZE;
-      int yOver = e.getY() % NODE_SIZE;
+          //mouse clicks not exactly at node point of creation, so find remainder
+          int xOver = e.getX() % NODE_SIZE;
+          int yOver = e.getY() % NODE_SIZE;
 
-      //s key and left mouse makes start node
-      if(keyPress == 's') {
+          //s key and left mouse makes start node
+          if (keyPress == 's') {
 
-        int xTmp = e.getX() - xOver;
-        int yTmp = e.getY() - yOver;
+              int xTmp = e.getX() - xOver;
+              int yTmp = e.getY() - yOver;
 
-        //if start is null, the create a new start node.
-		//check if the position already has a wall or end node presend there
-		//Do not create start node is there is a wall at that place
-		//override if there was an end node there. 
-        if(start == null) {
+              //if start is null, the create a new start node.
+              //check if the position already has a wall or end node presend there
+              //Do not create start node is there is a wall at that place
+              //override if there was an end node there.
+              if (start == null) {
 
-          if(!path.isWall(new Point(xTmp, yTmp))) {
-            if(end == null) {
-              start = new Node(xTmp, yTmp);
-            } else {
-              if(!end.equals(new Node(xTmp, yTmp))) {
-                start = new Node(xTmp, yTmp);
+                  if (!path.isWall(new Point(xTmp, yTmp))) {
+                      if (end == null) {
+                          start = new Node(xTmp, yTmp);
+                      } else {
+                          if (!end.equals(new Node(xTmp, yTmp))) {
+                              start = new Node(xTmp, yTmp);
+                          }
+                      }
+                  }
+
+                  //If there was a start already, change its coordinates.
+              } else {
+
+                  if (!path.isWall(new Point(xTmp, yTmp))) {
+                      if (end == null) {
+                          start.setXY(xTmp, yTmp);
+                      } else {
+                          if (!end.equals(new Node(xTmp, yTmp))) {
+                              start.setXY(xTmp, yTmp);
+                          }
+                      }
+                  }
+
               }
-            }
-          }
 
-        //If there was a start already, change its coordinates.
-        } else {
+              repaint();
 
-          if(!path.isWall(new Point(xTmp, yTmp))) {
-            if(end == null) {
-              start.setXY(xTmp, yTmp);
-            } else {
-              if(!end.equals(new Node(xTmp, yTmp))) {
-                start.setXY(xTmp, yTmp);
+              //e key and left mouse makes end node
+          } else if (keyPress == 'e') {
+
+              int xTmp = e.getX() - xOver;
+              int yTmp = e.getY() - yOver;
+
+              //same as start node
+              if (end == null) {
+
+                  if (!path.isWall(new Point(xTmp, yTmp))) {
+                      if (start == null) {
+                          end = new Node(xTmp, yTmp);
+                      } else {
+                          if (!start.equals(new Node(xTmp, yTmp))) {
+                              end = new Node(xTmp, yTmp);
+                          }
+                      }
+                  }
+
+                  //same as for start node
+              } else {
+
+                  if (!path.isWall(new Point(xTmp, yTmp))) {
+                      if (start == null) {
+                          end.setXY(xTmp, yTmp);
+                      } else {
+                          if (!start.equals(new Node(xTmp, yTmp))) {
+                              end.setXY(xTmp, yTmp);
+                          }
+                      }
+                  }
+
               }
-            }
-          }
 
-        }
+              repaint();
 
-        repaint();
+              //d key and left mouse deletes nodes
+          } else if (keyPress == 'd') {
+              //check if the curr node is start, end or a wall and set it to null
+              int nodeX = e.getX() - xOver;
+              int nodeY = e.getY() - yOver;
 
-      //e key and left mouse makes end node
-      } else if(keyPress == 'e') {
-        
-        int xTmp = e.getX() - xOver;
-        int yTmp = e.getY() - yOver;
-
-        //same as start node
-        if(end == null) {
-          
-          if(!path.isWall(new Point(xTmp, yTmp))) {
-            if(start == null) {
-              end = new Node(xTmp, yTmp);
-            } else {
-              if(!start.equals(new Node(xTmp, yTmp))) {
-                end = new Node(xTmp, yTmp);
+              if (start != null && start.equals(new Node(nodeX, nodeY))) {
+                  start = null;
+              } else if (end != null && end.equals(new Node(nodeX, nodeY))) {
+                  end = null;
+              } else {
+                  path.removeWall(new Point(nodeX, nodeY));
               }
-            }
-          }
 
-        //same as for start node
-        } else {
-          
-          if(!path.isWall(new Point(xTmp, yTmp))) {
-            if(start == null) {
-              end.setXY(xTmp, yTmp);
-            } else {
-              if(!start.equals(new Node(xTmp, yTmp))) {
-                end.setXY(xTmp, yTmp);
+              repaint();
+
+              //Create walls by simply clicking on the nodes.
+          } else {
+              //create walls and add to wall list
+              Node tmpWall = new Node(e.getX() - xOver, e.getY() - yOver);
+
+              if (start == null && end == null) {
+                  path.addWall(new Point(tmpWall.getX(), tmpWall.getY()));
               }
-            }
+
+              if (!(tmpWall.equals(start)) && !(tmpWall.equals(end))) {
+                  path.addWall(new Point(tmpWall.getX(), tmpWall.getY()));
+              }
+
+              repaint();
           }
-
-        }
-
-        repaint();
-
-      //d key and left mouse deletes nodes
-      } else if(keyPress == 'd') {
-        //check if the curr node is start, end or a wall and set it to null
-        int nodeX = e.getX() - xOver;
-        int nodeY = e.getY() - yOver;
-
-        if(start != null && start.equals(new Node(nodeX, nodeY))) {
-          start = null;
-        } else if(end != null && end.equals(new Node(nodeX, nodeY))) {
-          end = null;
-        } else {
-          path.removeWall(new Point(nodeX, nodeY));
-        }
-
-        repaint();
-
-      //Create walls by simply clicking on the nodes.
-      } else {
-        //create walls and add to wall list
-        Node tmpWall = new Node(e.getX() - xOver, e.getY() - yOver);
-
-        if(start == null && end == null) {
-          path.addWall(new Point(tmpWall.getX(), tmpWall.getY()));
-        }
-
-        if(!(tmpWall.equals(start)) && !(tmpWall.equals(end))) {
-          path.addWall(new Point(tmpWall.getX(), tmpWall.getY()));
-        }
-
-        repaint();
       }
   }
 
-  @Override
-  public void mouseClicked(MouseEvent e) {
-    //all mouse clicks to change grid somehow
-	//call the generic mouse EventHandler function on any kind of mouse click when the algorithm is not running
-    if(!path.isRun()) {
-      gridWork(e);
-    }
-  }
+      @Override
+      public void mouseClicked (MouseEvent e){
+          //all mouse clicks to change grid somehow
+          //call the generic mouse EventHandler function on any kind of mouse click when the algorithm is not running
+          if (!path.isRun()) {
+              gridWork(e);
+          }
+      }
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
-    // set a timer delay of 50
-    timer.setDelay(50);
+      @Override
+      public void actionPerformed (ActionEvent e){
+          // set a timer delay of 50
+          timer.setDelay(50);
 
-    if(path.isRun() && !path.isComplete() && !path.isPause()) {
-      path.aStarPath();
-    }
-    repaint();
-  }
+          if (path.isRun() && !path.isComplete() && !path.isPause()) {
+              path.aStarPath();
+          }
+          repaint();
+      }
 
-  public boolean isOctile() {
-    return isOctile;
-  }
+      public boolean isOctile () {
+          return isOctile;
+      }
 
-  @Override
-  public void keyReleased(KeyEvent e) {
-    //keyPress = 0;
-  }
+      @Override
+      public void keyReleased (KeyEvent e){
+          //keyPress = 0;
+      }
 
-  @Override
-  public void mouseDragged(MouseEvent e) {
-    if(!path.isRun()) {
-      gridWork(e);
-    }
-  }
+      @Override
+      public void mouseDragged (MouseEvent e){
+          if (!path.isRun()) {
+              gridWork(e);
+          }
+      }
 
-  @Override
-  public void keyTyped(KeyEvent e) {
-  }
+      @Override
+      public void keyTyped (KeyEvent e){
+      }
 
-  @Override
-  public void mouseMoved(MouseEvent e) {
-  }
+      @Override
+      public void mouseMoved (MouseEvent e){
+      }
 
-  @Override
-  public void mouseEntered(MouseEvent e) {
-  }
+      @Override
+      public void mouseEntered (MouseEvent e){
+      }
 
-  @Override
-  public void mouseExited(MouseEvent e) {
-  }
+      @Override
+      public void mouseExited (MouseEvent e){
+      }
 
-  @Override
-  public void mousePressed(MouseEvent e) {
-  }
+      @Override
+      public void mousePressed (MouseEvent e){
+      }
 
-  @Override
-  public void mouseReleased(MouseEvent e) {
-  }
-
-  public static void main(String[] args) {
-    new Controller();
-  }
+      @Override
+      public void mouseReleased (MouseEvent e){
+      }
+      public static void main (String[]args){
+          new Controller();
+      }
 }
