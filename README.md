@@ -23,24 +23,24 @@ The main steps involved are :
 5. Run the algorithm.
 6. Clear the grid, undo an operation(unselect a start/end/wall node).
 
-##The main controls are :
-Press( do not hold) 's' and click anywhere on the grid to create a start node.
+## The main controls are :
+* Press( do not hold) `'s'` and click anywhere on the grid to create a start node.
 
-Press 'e' and click anywhere on the grid to create an end node.
+* Press `'e'` and click anywhere on the grid to create an end node.
 
-Press 'c' to clear the grid or start over.
+* Press `'c'` to clear the grid or start over.
 
-Press 'backspace' to completely clear the grid while keeping start/end node
+* Press 'backspace' to completely clear the grid while keeping start/end node
 
-Press 'd' and click on the specific node the user wants to delete.
+* Press `'d'` and click on the specific node the user wants to delete.
 
-Press '1' to use the Dijkstra pathfinding
+* Press `'1'` to use the Dijkstra pathfinding
 
-Press '2' to use the A-Star pathfinding
+* Press `'2'` to use the A-Star pathfinding
 
-Press 'spacebar' to run the algorithm.
+* Press `'spacebar'` to run the algorithm.
 
-#Misc Information
+# Misc Information
 *This was an academic project which I built with some( a lot, in fact) help from the main project here :
 https://github.com/lootrr/PathFinder-Visualization
 
@@ -52,6 +52,6 @@ https://github.com/lootrr/PathFinder-Visualization
 *The A-star algorithm uses heuristic cost to find the min cost path. Consider this page for a better understanding.*
 http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html#S7 
 
-#For Queries/doubts/help
+# For Queries/doubts/help
 Forward your queries to **prabhat25199@gmail.com **
 
