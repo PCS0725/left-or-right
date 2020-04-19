@@ -23,6 +23,7 @@ The main steps involved are :
 5. Run the algorithm.
 6. Clear the grid, undo an operation(unselect a start/end/wall node).
 
+
 ## The main controls are :
 * Press( do not hold) `'s'` and click anywhere on the grid to create a start node.
 
@@ -34,14 +35,15 @@ The main steps involved are :
 
 * Press `'d'` and click on the specific node the user wants to delete.
 
-* Press `'1'` to use the Dijkstra pathfinding
+* Press `'1'` to use Dijkstra's Algorithm.
 
-* Press `'2'` to use the A-Star pathfinding
+* Press `'2'` to use A-Star pathfinding algorithm.
 
 * Press `'spacebar'` to run the algorithm.
 
+
 # Misc Information
-*This was an academic project which I built with some( a lot, in fact) help from the main project here :
+*This was an academic project which I built with some( a lot, in fact) help from the main project here :*
 https://github.com/lootrr/PathFinder-Visualization
 
 *The cost of path and other data is displayed on the console.*
@@ -52,6 +54,7 @@ https://github.com/lootrr/PathFinder-Visualization
 *The A-star algorithm uses heuristic cost to find the min cost path. Consider this page for a better understanding.*
 http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html#S7 
 
+
 # For Queries/doubts/help
-Forward your queries to **prabhat25199@gmail.com **
+Forward your queries to *prabhat25199@gmail.com *
 
